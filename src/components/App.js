@@ -1,56 +1,45 @@
-import React, { useReducer } from 'react';
+import React, { useState, useEffect } from 'react';
+
+import CountrySelect from './CountrySelect';
+import MeasurementCard from './MeasurementCard';
+
+import { getAirInfo } from './api';
+
 import './App.css';
 
-//create initial state to use in reducer
-const initialState = {
-  cityOne: '',
-  cityTwo: ''
-}
-
-
-function reducer(state, {field, value}) {
-  return {
-    ...state,
-    [field]: value
-  }
-}
-
 function App() {
+  const [cityOne, setCityOne] = useState(null);
+  const [cityTwo, setCityTwo] = useState(null);
+  const [cityOneMeasurements, setCityOneMeasurements] = useState([]);
+  const [cityTwoMeasurements, setCityTwoMeasurements] = useState([]);
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  useEffect(() => {
+    if (cityOne && cityTwo) {
+      getAirInfo(cityOne)
+        .then((measurements) => setCityOneMeasurements(measurements))
+        .catch((e) => console.log(e))
 
-  const onChange = (e) => {
-    dispatch({ field: e.target.name, value: e.target.value })
-  }
-
-  const handleSubmit = e => {
-    e.preventDefault()
-  }
-
-  const { cityOne, cityTwo } = state
+      getAirInfo(cityTwo)
+        .then((measurements) => setCityTwoMeasurements(measurements))
+        .catch((e) => console.log(e))
+    }
+  }, [cityOne, cityTwo])
 
   return (
     <div className="App">
       <h1 className="App-header">Air Quality Comparison Tool</h1>
       <div>
         <p>Please enter two cities:</p>
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="cityOne">First City</label>
-          <input
-            type="text"
-            name="cityOne"
-            value={cityOne}
-            onChange={onChange}
-            />
-          <label htmlFor="cityTwo">Second City</label>
-          <input
-            type="text"
-            name="cityTwo"
-            value={cityTwo}
-            onChange={onChange}
-          />
-          <button type='submit'>Submit</button>
-        </form>
+        <CountrySelect setCity={setCityOne} />
+        <CountrySelect setCity={setCityTwo} />
+      </div>
+      <h1>{cityOne}</h1>
+      <div className="cards-container">
+        {cityOneMeasurements.map((measurement) => <MeasurementCard key={measurement.parameter} {...measurement} />)}
+      </div>
+      <h1>{cityTwo}</h1>
+      <div className="cards-container">
+        {cityTwoMeasurements.map((measurement) => <MeasurementCard key={measurement.parameter} {...measurement} />)}
       </div>
     </div>
   );

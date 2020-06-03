@@ -28,7 +28,7 @@ function App() {
   return (
     <div className="App">
       <h1 className="App-header">Air Quality Comparison Tool</h1>
-      <div>
+      <div className="dropdown-container">
         <p>Please enter two cities:</p>
         <CountrySelect setCity={setCityOne} />
         <CountrySelect setCity={setCityTwo} />

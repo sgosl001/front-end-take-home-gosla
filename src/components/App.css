@@ -9,6 +9,17 @@
   justify-content: center;
 }
 
+select {
+  width: 250px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.dropdown-container {
+  text-align: center;
+}
+
 .cards-container {
   display: flex;
   flex-wrap: wrap;
@@ -16,6 +27,10 @@
 
 .card {
   margin: 20px;
+  padding: 8px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  border: 2px solid rgb(194, 194, 194);
+  border-radius: 10px;
 }
 
 h1, h2, h3, h4 {

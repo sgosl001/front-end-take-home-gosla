@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { getCountries, getCities } from './api';
 
-export default function CountrySelect({ setCity }) {
+import { getCountries, getCities } from '../api';
+
+export default function CountrySelect({ setCity, setHasError }) {
 
   const [countries, setCountries] = useState([]);
   const [cityList, setCityList] = useState([]);
@@ -10,8 +11,11 @@ export default function CountrySelect({ setCity }) {
 
   useEffect(() => {
     getCountries()
-      .then((countries) => setCountries(countries))
-      .catch((e) => console.log(e))
+      .then((countries) => {
+        setCountries(countries)
+        setHasError(false)
+      })
+      .catch((e) => setHasError(true))
   }, [])
 
   const onCountryChange = (e) => {
@@ -20,8 +24,11 @@ export default function CountrySelect({ setCity }) {
 
     setSelectedCity('');
     getCities(country)
-      .then((cities) => setCityList(cities))
-      .catch((e) => console.log(e))
+      .then((cities) => {
+        setCityList(cities)
+        setHasError(false)
+      })
+      .catch((e) => setHasError(true))
   }
 
   const onCityChange = (e) => {
@@ -32,13 +39,13 @@ export default function CountrySelect({ setCity }) {
 
   return (
     <div>
-      <select value={selectedCountry} onChange={onCountryChange}>
+      <select data-testid="countrySelect" value={selectedCountry} onChange={onCountryChange}>
         <option value=''>Select a Country</option>
         {countries.filter((country) => !!country.name).map((country) => {
           return <option value={country.code} key={country.code}>{country.name}</option>
         })}
       </select>
-      <select value={selectedCity} onChange={onCityChange}>
+      <select data-testid="citySelect" value={selectedCity} onChange={onCityChange}>
         <option value=''>Select a City</option>
         {cityList.filter((city) => city.name !== 'N/A').map((city) => {
           return <option value={city.name} key={city.name}>{city.name}</option>

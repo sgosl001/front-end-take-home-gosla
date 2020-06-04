@@ -9,6 +9,10 @@
   justify-content: center;
 }
 
+.error {
+  color: red;
+}
+
 select {
   width: 250px;
   -webkit-box-sizing: border-box;
